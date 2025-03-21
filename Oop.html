@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Manajemen Transportasi</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        h2 {
+            color: #fff;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+        }
+        input {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+        }
+        button {
+            background-color: #ff6b6b;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #ff4f4f;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            overflow: hidden;
+            color: #333;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #28a745;
+            color: white;
+        }
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        .btn-selesai {
+            background-color: #ff9f43;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-selesai:hover {
+            background-color: #ff7849;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>🚗 Sistem Manajemen Transportasi 🏍️</h2>
+
+    <div class="container">
+        <h3>Tambah Pelanggan</h3>
+        <input type="text" id="nama" placeholder="Nama Pelanggan">
+        <input type="text" id="nomorTelepon" placeholder="Nomor Telepon">
+        <input type="text" id="kendaraanDisewa" placeholder="Kendaraan yang Disewa">
+        <button onclick="tambahPelanggan()">+ Tambah</button>
+    </div>
+
+    <div class="container">
+        <h3>Daftar Pelanggan yang Menyewa Kendaraan</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Nomor Telepon</th>
+                    <th>Kendaraan</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tabelPelanggan">
+                <!-- Data pelanggan akan muncul di sini -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        class Pelanggan {
+            constructor(nama, nomorTelepon, kendaraanDisewa) {
+                this.nama = nama;
+                this.nomorTelepon = nomorTelepon;
+                this.kendaraanDisewa = kendaraanDisewa;
+                this.status = "Sedang Disewa";
+            }
+        }
+
+        const daftarPelanggan = [];
+
+        function tambahPelanggan() {
+            const nama = document.getElementById("nama").value;
+            const nomorTelepon = document.getElementById("nomorTelepon").value;
+            const kendaraanDisewa = document.getElementById("kendaraanDisewa").value;
+
+            if (nama && nomorTelepon && kendaraanDisewa) {
+                const pelangganBaru = new Pelanggan(nama, nomorTelepon, kendaraanDisewa);
+                daftarPelanggan.push(pelangganBaru);
+                updateTabel();
+                document.getElementById("nama").value = "";
+                document.getElementById("nomorTelepon").value = "";
+                document.getElementById("kendaraanDisewa").value = "";
+            } else {
+                alert("Harap isi semua data!");
+            }
+        }
+
+        function updateTabel() {
+            const tabel = document.getElementById("tabelPelanggan");
+            tabel.innerHTML = "";
+            daftarPelanggan.forEach((pelanggan, index) => {
+                const row = `<tr>
+                    <td>${pelanggan.nama}</td>
+                    <td>${pelanggan.nomorTelepon}</td>
+                    <td>${pelanggan.kendaraanDisewa}</td>
+                    <td id="status-${index}">${pelanggan.status}</td>
+                    <td><button class="btn-selesai" onclick="ubahStatus(${index})">Selesai Peminjaman</button></td>
+                </tr>`;
+                tabel.innerHTML += row;
+            });
+        }
+
+        function ubahStatus(index) {
+            daftarPelanggan[index].status = "Selesai Sewa";
+            document.getElementById(`status-${index}`).innerText = "Selesai Sewa";
+        }
+    </script>
+
+</body>
+</html>
